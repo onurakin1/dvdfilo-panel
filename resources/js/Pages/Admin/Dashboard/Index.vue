@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xl-12">
+                                <div class="col-xl-12" v-if="mostPreferredBrand">
                                     <div class="card card-custom gutter-b mt-5" style="
                                             height: 200px;
                                             color: white;
