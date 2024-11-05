@@ -35,7 +35,7 @@
                             {{ offer.email }}
                         </td>
                         <td class="text-start">
-                            {{ offer.brand.brand_name }}
+                            {{ offer.brand }}
                         </td>
                         <td class="text-start">
                             {{ offer.carname }}
