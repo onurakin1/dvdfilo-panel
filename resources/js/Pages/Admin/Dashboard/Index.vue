@@ -100,11 +100,7 @@
                                             <div class="font-weight-bolder text-white h4 mt-3">
                                                 En Çok Tercih Edilen Marka
                                             </div>
-                                            <span class="text-white h2">
-                                                {{
-                                                    mostPreferredBrand.brand_name
-                                                }}
-                                            </span>
+                                            <span class="text-white h2">{{ mostPreferredBrand.brand_name || 'Henüz yok' }}</span>
                                         </div>
                                     </div>
                                 </div>
