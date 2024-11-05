@@ -161,7 +161,7 @@ class ContentsController extends Controller
         $record->main_slider = json_encode($images);
         $record->save();
 
-               return redirect()->back()->with('message', 'Image deleted successfully.');
+        return redirect()->back()->with('message', 'Silme işleminiz başarı ile gerçekleşmiştir.');
     }
 
     public function deleteRefImage(Request $request, $id)
@@ -185,7 +185,7 @@ class ContentsController extends Controller
             $record->reference = json_encode($referenceImages);
             $record->save();
     
-                    return redirect()->back()->with('message', 'Image deleted successfully.');
+            return redirect()->back()->with('message', 'Silme işleminiz başarı ile gerçekleşmiştir.');
         }
     
         return response()->json(['message' => 'Image not found in reference array'], 404);

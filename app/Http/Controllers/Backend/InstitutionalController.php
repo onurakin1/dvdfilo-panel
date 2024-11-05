@@ -17,79 +17,121 @@ class InstitutionalController extends Controller
 
     public function create(Request $request)
     {
+        // Validate the incoming request
         $request->validate([
             'content_tr' => 'nullable|string',
             'content_en' => 'nullable|string',
-         
-
+            'file_tr' => 'nullable|file|mimes:jpg,jpeg,png,gif', // Validate Turkish file type
+            'file_en' => 'nullable|file|mimes:jpg,jpeg,png,gif', // Validate English file type
         ]);
-
-        // JSON formatında dizi oluşturma
+    
+        // Initialize variables for file names
+        $fileNameTr = null;
+        $fileNameEn = null;
+    
+        // Handle Turkish image upload if a file is provided
+        if ($request->hasFile('file_tr')) {
+            $fileTr = $request->file('file_tr');
+            $fileNameTr = md5(time() . '_tr') . '.' . $fileTr->getClientOriginalExtension();
+            $fileTr->move(public_path('uploads'), $fileNameTr);
+        }
+    
+        // Handle English image upload if a file is provided
+        if ($request->hasFile('file_en')) {
+            $fileEn = $request->file('file_en');
+            $fileNameEn = md5(time() . '_en') . '.' . $fileEn->getClientOriginalExtension();
+            $fileEn->move(public_path('uploads'), $fileNameEn);
+        }
+    
+        // Encode the image data as JSON
+        $imageData = json_encode([
+            'tr' => $fileNameTr,
+            'en' => $fileNameEn,
+        ]);
+    
+        // Encode the content fields as JSON
         $aboutUsData = json_encode([
-            'tr' => $request->content_tr,
-            'en' => $request->content_en,
+            'tr' => $request->input('content_tr', ''),
+            'en' => $request->input('content_en', ''),
         ]);
-
-        $now = Carbon::now();
-        $file = $request->file('file');
-        $fileName = md5(time()) . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('uploads'), $fileName);
-      
-     
-
-
+    
+        // Create a new content model
         $project = InstitutionalModels::create([
-      'image' => $fileName,
-            'content' => $aboutUsData,  // JSON olarak saklama
-         
+            'image' => $imageData, // Store image data as JSON
+            'content' => $aboutUsData, // Store content as JSON
         ]);
-
+    
         return redirect()->route('backend.institutional')->with('success', 'Contents created successfully');
     }
 
 
-    
-    
+
     public function update(Request $request, $id)
     {
         // Validate the incoming request
         $request->validate([
             'content_tr' => 'nullable|string',
             'content_en' => 'nullable|string',
-         
-
+            'file_tr' => 'nullable', // Validate Turkish file type
+            'file_en' => 'nullable', // Validate English file type
         ]);
-
+    
         // Fetch the existing content
         $contentModel = InstitutionalModels::findOrFail($id);
+    
+        // Initialize variables for file names
+        $imageData = json_decode($contentModel->image, true); // Decode JSON into associative array
 
-        $now = Carbon::now();
-        $file = $request->file('file');
-        $fileName = md5(time()) . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('uploads'), $fileName);
-      
-
-        // Encode the about_us and our_services fields as JSON
-        $aboutUsData = json_encode([
-            'tr' => $request->content_tr,
-            'en' => $request->content_en,
+        $fileNameTr = $imageData['tr'] ?? null; // Access Turkish image or set to null if not exists
+        $fileNameEn = $imageData['en'] ?? null;
+    
+        // Handle Turkish image upload if a new file is provided
+        if ($request->hasFile('file_tr')) {
+            $fileTr = $request->file('file_tr');
+            $fileNameTr = md5(time() . '_tr') . '.' . $fileTr->getClientOriginalExtension();
+            $fileTr->move(public_path('uploads'), $fileNameTr);
+    
+            // Delete the old Turkish file if it exists
+            if ($contentModel->image_tr && file_exists(public_path('uploads/' . $contentModel->image_tr))) {
+                unlink(public_path('uploads/' . $contentModel->image_tr));
+            }
+        }
+    
+        // Handle English image upload if a new file is provided
+        if ($request->hasFile('file_en')) {
+            $fileEn = $request->file('file_en');
+            $fileNameEn = md5(time() . '_en') . '.' . $fileEn->getClientOriginalExtension();
+            $fileEn->move(public_path('uploads'), $fileNameEn);
+    
+            // Delete the old English file if it exists
+            if ($contentModel->image_en && file_exists(public_path('uploads/' . $contentModel->image_en))) {
+                unlink(public_path('uploads/' . $contentModel->image_en));
+            }
+        }
+    
+        // Encode the image data as JSON
+        $imageData = json_encode([
+            'tr' => $fileNameTr,
+            'en' => $fileNameEn,
         ]);
- 
-
-
-
-
+    
+        // Encode the content fields as JSON
+        $aboutUsData = json_encode([
+            'tr' => $request->input('content_tr', ''),
+            'en' => $request->input('content_en', ''),
+        ]);
+    
         // Update the content model
         $contentModel->update([
-       'image' => $fileName,
+            'image' => $imageData,
             'content' => $aboutUsData,
- 
-  
         ]);
-
+    
         return redirect()->route('backend.institutional')->with('success', 'Content updated successfully');
     }
-
+    
+    
+    
 
 
 
