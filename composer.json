@@ -1,0 +1,90 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": ["framework", "laravel"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "ext-dom": "*",
+        "astrotomic/laravel-imgix": "^1.0",
+        "barryvdh/laravel-dompdf": "^2.0",
+        "browner12/helpers": "^3.3",
+        "codezero/laravel-unique-translation": "^3.5",
+        "egulias/email-validator": "^3.2",
+        "fruitcake/laravel-cors": "^2.0",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "illuminate/database": "^9.38",
+        "inertiajs/inertia-laravel": "^0.6.3",
+        "intervention/image": "^3.4",
+        "intonate/laravel-mandrill-driver": "^3.0",
+        "jgrossi/corcel": "^6.0",
+        "joedixon/laravel-translation": "^2.1",
+        "laravel/fortify": "^1.8",
+        "laravel/framework": "^9.0",
+        "laravel/sanctum": "^2.6",
+        "laravel/tinker": "^2.5",
+        "maatwebsite/excel": "^3.1",
+        "opcodesio/log-viewer": "^3.1",
+        "protonemedia/inertiajs-tables-laravel-query-builder": "^2.0",
+        "pusher/pusher-php-server": "^7.2",
+        "spatie/laravel-activitylog": "^4.4",
+        "spatie/laravel-backup": "^8.1",
+        "spatie/laravel-ignition": "^1.6",
+        "spatie/laravel-permission": "^5.5",
+        "spatie/laravel-query-builder": "^5.1",
+        "spatie/laravel-sluggable": "^3.1",
+        "spatie/laravel-translatable": "5.2",
+        "staudenmeir/laravel-adjacency-list": "^1.0",
+        "tightenco/ziggy": "^1.0"
+    },
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.6",
+        "fakerphp/faker": "^1.9.1",
+        "laravel/breeze": "^1.4",
+        "laravel/sail": "^1.0.1",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^6.0",
+        "phpunit/phpunit": "^9.5.10",
+        "spatie/laravel-web-tinker": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
